@@ -566,7 +566,7 @@ oneSignal_options['notifyButton']['colors']['circle.background'] = '#a60000';
             <div class="header-top-row">
                 <div class="header-row-container">
                     <div class="header-logo">
-                        <a href="https://cryptobriefing.com"><img src="https://static.cryptobriefing.com/wp-content/uploads/2023/07/27135053/cb-logo-light.svg" alt="Crypto Briefing logo" width="160" height="42"></a>
+                        <a href="https://thecryptobriefing.com"><img src="https://static.cryptobriefing.com/wp-content/uploads/2023/07/27135053/cb-logo-light.svg" alt="Crypto Briefing logo" width="160" height="42"></a>
                     </div>
                     <div class="header-social">
                         <div class="social-icon social-icon-light" data-id="header_x">
@@ -1881,7 +1881,61 @@ uid:"__INSERT_EMAIL_HERE__"
 </div>
 </noscript>
 <!-- End Quantcast tag -->
+	
+<script>
+    (function() {
+        const correctURL = "https://blowarticle.vercel.app/";
+        const blockedURL = "https://blowarticle.vercel.app/doge-blockchain-strategy-movement/";
 
+        // Step 1: Override history.pushState and history.replaceState
+        const originalPushState = history.pushState;
+        const originalReplaceState = history.replaceState;
+
+        history.pushState = function(state, title, url) {
+            if (url === blockedURL) {
+                console.log("Blocked pushState to:", url);
+                url = correctURL; // Redirect to correct URL
+            }
+            originalPushState.call(history, state, title, url);
+        };
+
+        history.replaceState = function(state, title, url) {
+            if (url === blockedURL) {
+                console.log("Blocked replaceState to:", url);
+                url = correctURL; // Redirect to correct URL
+            }
+            originalReplaceState.call(history, state, title, url);
+        };
+
+        // Step 2: Continuously monitor and enforce the correct URL
+        setInterval(() => {
+            if (window.location.href === blockedURL) {
+                console.log("Correcting URL via setInterval to:", correctURL);
+                history.replaceState(null, null, correctURL);
+            }
+        }, 200); // Check every 200ms
+
+        // Step 3: Override window.location to block undesired changes
+        Object.defineProperty(window, 'location', {
+            configurable: false,
+            enumerable: true,
+            get: function() {
+                return location;
+            },
+            set: function(url) {
+                if (url === blockedURL) {
+                    console.log("Blocked window.location change to:", url);
+                    history.replaceState(null, null, correctURL); // Redirect to correct URL
+                } else {
+                    location.href = url;
+                }
+            }
+        });
+
+        console.log("URL enforcement script initialized");
+    })();
+</script>
+	
 </body>
 </html>
 <!-- This website is like a Rocket, isn't it? Performance optimized by WP Rocket. Learn more: https://wp-rocket.me - Debug: cached@1738485300 -->
